@@ -1,10 +1,41 @@
 var express = require('express');
 var router = express.Router();
+const dotenv = require('dotenv');
+const sequelize = require('../db');
+const userController = require('../controllers/userController');
+const { link } = require('.');
 
-/* GET home page. */
+dotenv.config();
+
+const app = express();
+app.use(express.json());
+
+/* GET Dashboard page. */
 router.get('/', function(req, res, next) {
   res.render('home', { link: 'index' });
 });
+
+// GET USERS LIST
+router.get('/users_list', async function(req, res, next) {
+  try {
+    // Get all users
+    const users = await userController.getAllUsers(req, res);
+    // Pass the users data to the view
+    res.render('home', { link: 'users/user_list', users: users });
+  } catch (error) {
+    res.status(500).json({ error: 'An error occurred while fetching users.' });
+  }
+});
+
+// GET FORM CREATE USERS
+router.get('/users_form', function(req, res, next) {
+  res.render('home', { link: 'users/user_form' });
+});
+
+
+
+// POST/INSERT DATA USER
+router.post('/create_user', userController.createUser);
 
 /* GET form page */
 router.get('/forms/forms', function(req, res, next) {

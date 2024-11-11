@@ -81,4 +81,74 @@ $(document).ready(function() {
             ]);
           $("#addRowModal").modal("hide");
         });
+
+        // FORM INPUT USERS
+        $("#form_users").submit(function (e) {
+          e.preventDefault(); // Prevent the default form submission
+          
+          swal({
+            title: "Are you sure?",
+            text: "Do you want to submit this form?",
+            icon: "warning",
+            buttons: {
+              confirm: {
+                text: "Yes, submit it!",
+                className: "btn btn-success",
+              },
+              cancel: {
+                text: "Cancel",
+                visible: true,
+                className: "btn btn-danger",
+              },
+            },
+          }).then((willSubmit) => {
+            if (willSubmit) {
+             // If the user confirms, submit the form using AJAX
+      $.ajax({
+        url: "/create_user", // Form submission URL
+        type: "POST",
+        data: $("#form_users").serialize(), // Serialize form data
+        success: function(response) {
+          // Redirect to /users_list if the submission is successful
+          swal({
+            title: "Submission Success",
+            text: "Create new data is success",
+            icon: "success",
+            buttons: {
+              confirm: {
+                text: "OK",
+                className: "btn btn-success",
+              },
+            },
+          }).then(() => {
+            // Redirect to /users_list after the user clicks "OK"
+            window.location.href = "/users_list";
+          });
+        },
+        error: function(xhr, status, error) {
+          // Show SweetAlert error if submission fails
+          swal({
+            title: "Submission Failed",
+            text: "An error occurred while submitting the form. Please try again.",
+            icon: "error",
+            buttons: {
+              confirm: {
+                text: "OK",
+                className: "btn btn-danger",
+              },
+            },
+          });
+        }
+      });
+            } else {
+              swal.close();
+            }
+          });
+        });
+
+        $(document).on('click', '.userBtn', function() {
+          const userId = $(this).data('id');
+          console.log(userId);
+        });
+
 });
