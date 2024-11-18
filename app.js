@@ -1,12 +1,13 @@
+require('dotenv').config();
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const sequelize = require('./db'); // This will connect to the database
+const session = require('express-session');
 
 var indexRouter = require('./routes/index');
-// var usersRouter = require('./routes/users');
 
 var app = express();
 
@@ -20,17 +21,31 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Middleware session (harus sebelum rute)
+app.use(session({
+  secret: process.env.SESSION_SECRET || 'your-secret-key',
+  resave: false,
+  saveUninitialized: false,
+  cookie: { secure: false } // Set secure: true untuk HTTPS
+}));
+
+//USERNAME SESSIONS
+app.use((req, res, next) => {
+  res.locals.username = req.session.user ? req.session.user.username : null;
+  next();
+});
+
+// Routes
 app.use('/', indexRouter);
-// app.use('/users', usersRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
+  console.log(`404 - Not Found: ${req.originalUrl}`);
   next(createError(404));
 });
 
 // error handler
 app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
