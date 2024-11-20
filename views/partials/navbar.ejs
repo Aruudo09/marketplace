@@ -328,13 +328,13 @@
                 href="#"
                 aria-expanded="false"
               >
-                <div class="avatar-sm">
+                <!-- <div class="avatar-sm">
                   <img
                     src="assets/img/profile.jpg"
                     alt="..."
                     class="avatar-img rounded-circle"
                   />
-                </div>
+                </div> -->
                 <span class="profile-username">
                   <span class="op-7">Hi,</span>
                   <span class="fw-bold"><%= username ? username : 'Guest' %></span>
@@ -344,16 +344,16 @@
                 <div class="dropdown-user-scroll scrollbar-outer">
                   <li>
                     <div class="user-box">
-                      <div class="avatar-lg">
+                      <!-- <div class="avatar-lg">
                         <img
                           src="assets/img/profile.jpg"
                           alt="image profile"
                           class="avatar-img rounded"
                         />
-                      </div>
+                      </div> -->
                       <div class="u-text">
-                        <h4>Hizrian</h4>
-                        <p class="text-muted">hello@example.com</p>
+                        <h4><%= fullname ? fullname : 'Guest' %></h4>
+                        <p class="text-muted"></p>
                         <a
                           href="profile"
                           class="btn btn-xs btn-secondary btn-sm"

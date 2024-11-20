@@ -32,6 +32,7 @@ app.use(session({
 //USERNAME SESSIONS
 app.use((req, res, next) => {
   res.locals.username = req.session.user ? req.session.user.username : null;
+  res.locals.fullname = req.session.user ? req.session.user.fullname : null;
   next();
 });
 

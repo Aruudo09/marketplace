@@ -3,6 +3,7 @@ var router = express.Router();
 const { ensureAuthenticated, errorHandler, fetchUserById } = require('../middleware/auth');
 const { check, validationResult } = require('express-validator');
 const userController = require('../controllers/userController');
+const menuController = require('../controllers/menuController');
 
 /* GET Dashboard page. */
 router.get('/', ensureAuthenticated, function(req, res) {
@@ -47,7 +48,7 @@ router.post('/login_user', loginValidate, async (req, res) => {
     }
 
     // Simpan user di sesi
-    req.session.user = { id: user.id, username: user.username };
+    req.session.user = { id: user.id, username: user.username, fullname: user.fullname };
     res.redirect('/');
   } catch (err) {
     console.error('Error during login process:', err);
@@ -67,24 +68,6 @@ router.get('/logout', (req, res) => {
     res.redirect('/login');
   });
 });
-
-// Routes
-router.get('/users_list', errorHandler(async (req, res) => {
-  const users = await userController.getAllUsers();
-  res.render('home', { link: 'users/user_list', users });
-}));
-
-router.get('/user/edit/:id', fetchUserById, (req, res) => res.json(req.user));
-
-router.get('/users_form', (req, res) => {
-  res.render('home', { link: 'users/user_form' });
-});
-
-router.post('/create_user', errorHandler(userController.createUser));
-
-router.put('/user/update/:id', fetchUserById, errorHandler(userController.updateUser));
-
-router.delete('/user/delete/:id', fetchUserById, errorHandler(userController.deleteUser));
 
 // Global error handler for uncaught errors
 router.use((err, req, res, next) => {
