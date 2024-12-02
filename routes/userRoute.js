@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const userController = require('../controllers/userController');
-const { ensureAuthenticated, fetchUserById, errorHandler } = require('../middlewares');
+const { ensureAuthenticated, errorHandler, fetchUserById } = require('../middleware/auth');
 
 // USER LIST
 router.get('/users_list', ensureAuthenticated, errorHandler(async (req, res) => {

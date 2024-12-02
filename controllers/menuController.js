@@ -6,7 +6,7 @@ const handleErrorResponse = (res, error, message) => {
   res.status(500).json({ error: message });
 };
 
-// Get all users
+// Get all Menu
 exports.getAllMenu = async () => {
     try {
       return await Menu.findAll();
@@ -14,7 +14,17 @@ exports.getAllMenu = async () => {
         console.error(error); // Menampilkan error secara lebih rinci
       throw new Error('An error occurred while fetching Data.');
     }
-  }; 
+  };
+  
+  // GET SELECT MENU
+  exports.getSelectMenu = async () => {
+    try {
+      return await Menu.findAll({attributes: ['id_menu', 'nama_menu']});
+    } catch (error) {
+      console.error(error); // Menampilkan error secara lebih rinci
+      throw new Error('An error occurred while fetching Data.');
+    }
+  };
 
   exports.getMenuById = async (req, res) => {
     const { id } = req.params; // Ambil parameter ID dari request

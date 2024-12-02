@@ -1,7 +1,7 @@
 <div class="container">
     <div class="page-inner">
       <div class="page-header">
-        <h3 class="fw-bold mb-3">Users</h3>
+        <h3 class="fw-bold mb-3">Sub Menu</h3>
         <ul class="breadcrumbs mb-3">
           <li class="nav-home">
             <a href="#">
@@ -25,59 +25,63 @@
       <div class="row">
         <div class="col-md-12">
           <div class="card">
-            <form action="/create_user" id="form_users" method="POST">
+            <form action="/create_submenu" id="form_menu" method="POST">
                 <div class="card-header">
-                    <div class="card-title">Form User</div>
+                    <div class="card-title">Form Sub Menu</div>
                   </div>
                   <div class="card-body">
                     <div class="row">
                       <div class="col-md-6 col-lg-4">
                         <div class="form-group">
-                          <label for="username">Username</label>
+                          <label for="nama_menu">Sub Menu Name</label>
                           <input
                             type="text"
-                            name="username"
+                            name="nama_submenu"
                             class="form-control"
-                            id="username"
-                            placeholder="Enter Username"
+                            id="nama_menu"
+                            placeholder="Enter Sub Menu Name"
                           />
                         </div>
                         <div class="form-group">
-                          <label for="fullname">Fullname</label>
+                          <label for="link">Link</label>
                           <input
                             type="text"
-                            name="fullname"
+                            name="link"
                             class="form-control"
-                            id="fullname"
-                            placeholder="Enter Fullname"
+                            id="link"
+                            placeholder="Enter Link"
                           />
                         </div>
                         <div class="form-group">
-                          <label for="password">Password</label>
+                          <label for="icon">Icon</label>
                           <input
-                            type="password"
+                            type="text"
                             class="form-control"
-                            id="password"
-                            placeholder="Password"
-                            name="password"
+                            id="icon"
+                            placeholder="Icon"
+                            name="icon"
                           />
                         </div>
                         <div class="form-group">
-                          <label for="id_level"
-                            >ID Level</label
-                          >
-                          <select
-                            class="form-select"
-                            name="id_level"
-                            id="id_level"
-                          >
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                          </select>
+                            <label for="menu">Menu</label>
+                            <select name="menu" id="menu" class="form-select">
+                                <option value="" selected disabled>Pilih Opsi...</option>
+                                <% opsi.forEach(item => { %>
+                                  <option value="<%= item.id_menu %>"><%= item.nama_menu %></option>
+                                <% }); %>
+                            </select>
                         </div>
+                        <div class="form-group">
+                            <label for="urutan">Order</label>
+                            <input
+                              type="number"
+                              class="form-control"
+                              id="urutan"
+                              placeholder="Order"
+                              name="urutan"
+                              readonly
+                            />
+                          </div>
                         <div class="form-group">
                           <label>Active</label><br />
                           <div class="d-flex">
@@ -114,48 +118,12 @@
                             </div>
                           </div>
                         </div>
-                        <div class="form-group">
-                          <label>Approval</label><br />
-                          <div class="d-flex">
-                            <div class="form-check">
-                              <input
-                                class="form-check-input"
-                                type="radio"
-                                name="app"
-                                id="app1"
-                                value="Y"
-                                checked
-                              />
-                              <label
-                                class="form-check-label"
-                                for="app1"
-                              >
-                                Yes
-                              </label>
-                            </div>
-                            <div class="form-check">
-                              <input
-                                class="form-check-input"
-                                type="radio"
-                                name="app"
-                                id="app2"
-                                value="N"
-                              />
-                              <label
-                                class="form-check-label"
-                                for="app2"
-                              >
-                                No
-                              </label>
-                            </div>
-                          </div>
-                        </div>
                       </div>
                     </div>
                   </div>
                   <div class="card-action">
                     <button class="btn btn-success" type="submit">Submit</button>
-                    <a href="/users_list" class="btn btn-danger">Cancel</a>
+                    <a href="/submenu_list" class="btn btn-danger">Cancel</a>
                   </div>
                 </div>
             </form>

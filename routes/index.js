@@ -4,6 +4,9 @@ const { ensureAuthenticated, errorHandler, fetchUserById } = require('../middlew
 const { check, validationResult } = require('express-validator');
 const userController = require('../controllers/userController');
 const menuController = require('../controllers/menuController');
+const subMenuController = require('../controllers/subMenuController');
+const userRoutes = require('./userRoute');
+const menuRoutes = require('./menuRoute');
 
 /* GET Dashboard page. */
 router.get('/', ensureAuthenticated, function(req, res) {
@@ -75,69 +78,75 @@ router.use((err, req, res, next) => {
   res.status(500).json({ error: 'An internal server error occurred.' });
 });
 
-/* GET form page */
-router.get('/forms/forms', function(req, res, next) {
-  res.render('forms/forms');
+// ROUTER
+
+// router.use('/user', userRoutes);
+// router.use('/menu', menuRoutes);
+
+// USER LIST
+router.get('/users_list', ensureAuthenticated, errorHandler(async (req, res) => {
+  const users = await userController.getAllUsers();
+  res.render('home', { link: 'users/user_list', users });
+}));
+
+// MENAMPILKAN DATA EDIT USER USER
+router.get('/user/edit/:id', fetchUserById, (req, res) => res.json(req.user));
+
+// FORM USER
+router.get('/users_form', ensureAuthenticated, (req, res) => {
+  res.render('home', { link: 'users/user_form' });
 });
 
-router.get('/tables/tables', function(req, res, next) {
-  res.render('tables/tables');
+// ADD USER
+router.post('/create_user', errorHandler(userController.createUser));
+
+// UPDATE USER
+router.put('/user/update/:id', fetchUserById, errorHandler(userController.updateUser));
+
+// DELETE USER
+router.delete('/user/delete/:id', fetchUserById, errorHandler(userController.deleteUser));
+
+// Menu
+router.get('/menu_list', ensureAuthenticated, errorHandler(async (req, res) => {
+  const menu = await menuController.getAllMenu();
+  console.log(menu); // Cek apa yang dikembalikan oleh query
+  res.render('home', { link: 'menu/menu_list', menu })
+}));
+
+// MENU FORM
+router.get('/menu_form', ensureAuthenticated, (req, res) => {
+  res.render('home', { link: 'menu/menu_form' });
 });
 
-router.get('/datatables', function(req, res, next) {
-  res.render('home', { link: 'tables/datatables' });
-});
+// GET MAX MENU
+router.get('/menu_get_max', menuController.menuGetMax);
 
-router.get('/maps/googlemaps', function(req, res, next) {
-  res.render('maps/googlemaps');
-});
+// ADD MENU
+router.post('/create_menu', errorHandler(menuController.createMenu));
 
-router.get('/maps/jsvectormap', function(req, res, next) {
-  res.render('maps/jsvectormap');
-});
+// GET MENU EDIT DATA
+router.get('/menu/edit/:id', menuController.getMenuById);
 
-router.get('components/avatars', function(req, res, next) {
-  res.render('components/avatars');
-});
+// UPDATE MENU
+router.put('/menu/update/:id_menu', errorHandler(menuController.updateMenu));
 
-router.get('components/buttons', function(req, res, next) {
-  res.render('components/buttons');
-});
+// HAPUS MENU
+router.delete('/menu/delete/:id', errorHandler(menuController.deleteMenu));
 
-router.get('components/font-awesome-icons', function(req, res, next) {
-  res.render('components/font-awesome-icons');
-});
+// SUB MENU
+router.get('/submenu_list', ensureAuthenticated, errorHandler (async (req, res) => {
+  const submenu = await subMenuController.getAllSubMenu();
+  console.log(submenu); // Cek apa yang dikembalikan oleh query
+  res.render('home', { link: 'submenu/submenu_list', submenu });
+} ));
 
-router.get('components/gridsystem', function(req, res, next) {
-  res.render('components/gridsystem');
-});
+// ADD FORM SUB MENU
+router.get('/submenu_form', ensureAuthenticated, (async (req, res) => {
+  const opsi = await menuController.getSelectMenu();
+  res.render('home', { link:'submenu/submenu_form', opsi });
+}));
 
-router.get('components/notifications', function(req, res, next) {
-  res.render('components/notifications');
-});
-
-router.get('components/panels', function(req, res, next) {
-  res.render('components/panels');
-});
-
-router.get('components/simple-line-icons', function(req, res, next) {
-  res.render('components/simple-line-icons');
-});
-
-router.get('components/sweetalert', function(req, res, next) {
-  res.render('components/sweetalert');
-});
-
-router.get('components/typography', function(req, res, next) {
-  res.render('components/typography');
-});
-
-router.get('charts/charts', function(req, res, next) {
-  res.render('charts/charts');
-});
-
-router.get('charts/sparkline', function(req, res, next) {
-  res.render('charts/sparkline');
-});
+// INSERT SUB MENU
+router.post('/submenu_add', errorHandler(subMenuController.createSubMenu));
 
 module.exports = router;

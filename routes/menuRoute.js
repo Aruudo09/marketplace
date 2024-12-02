@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const menuController = require('../controllers/menuController');
-const { ensureAuthenticated, errorHandler } = require('../middlewares');
+const { ensureAuthenticated, errorHandler, fetchUserById } = require('../middleware/auth');
 
 // Menu
 router.get('/menu_list', ensureAuthenticated, errorHandler(async (req, res) => {
@@ -10,7 +10,7 @@ router.get('/menu_list', ensureAuthenticated, errorHandler(async (req, res) => {
     res.render('home', { link: 'menu/menu_list', menu })
   }));
   
-  // Menu Form
+  // MENU FORM
   router.get('/menu_form', ensureAuthenticated, (req, res) => {
     res.render('home', { link: 'menu/menu_form' });
   });
@@ -18,7 +18,7 @@ router.get('/menu_list', ensureAuthenticated, errorHandler(async (req, res) => {
   // GET MAX MENU
   router.get('/menu_get_max', menuController.menuGetMax);
   
-  // Create Menu
+  // ADD MENU
   router.post('/create_menu', errorHandler(menuController.createMenu));
   
   // GET MENU EDIT DATA

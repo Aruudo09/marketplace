@@ -1,39 +1,27 @@
 $(document).ready(function() {
 
-    // GET DATA MENU FOR EDIT
-    $(document). on('click', '.menuEditBtn', function() {
-        const id = $(this).data('id');
-        $.ajax({
-          url: `/menu/edit/${id}`,
-          type: "GET",
-          success: function(data) {
-            $('#nama_menu').val(data.nama_menu);
-            $('#link').val(data.link);
-            $('#icon').val(data.icon);
-            $('#urutan').val(data.urutan);
-            $('#is_active').val(data.is_active);
-            $('#hidden_id_menu').val(data.id_menu);
-          }, error: function() {
-            swal("Error", "Failed to load user data.", "error");
-          }
-        });
+    // Add Row
+    $("#add-row").DataTable({
+        pageLength: 5,
       });
 
-      // GET MAX URUTAN MENU
-      $.ajax({
-        url: '/menu_get_max',
-        type: "GET",
-        success: function(data) {
-          // console.log(data); // Data 'max' dari server akan dicetak di sini
-          $('#urutan').val(data + 1); // Opsional: Setel nilai input ke hasil
-        },
-        error: function(xhr, status, error) {
-          console.error('Error:', error); // Menangani error
-        }
+      var action =
+        '<td> <div class="form-button-action"> <button type="button" data-bs-toggle="tooltip" title="" class="btn btn-link btn-primary btn-lg" data-original-title="Edit Task"> <i class="fa fa-edit"></i> </button> <button type="button" data-bs-toggle="tooltip" title="" class="btn btn-link btn-danger" data-original-title="Remove"> <i class="fa fa-times"></i> </button> </div> </td>';
+
+      $("#addRowButton").click(function () {
+        $("#add-row")
+          .dataTable()
+          .fnAddData([
+            $("#addName").val(),
+            $("#addPosition").val(),
+            $("#addOffice").val(),
+            action,
+          ]);
+        $("#addRowModal").modal("hide");
       });
 
-      // CREATE MENU
-      $('#form_menu').submit(function(e) {
+    // FORM INPUT USERS
+    $("#form_users").submit(function (e) {
         e.preventDefault(); // Prevent the default form submission
         
         swal({
@@ -55,9 +43,9 @@ $(document).ready(function() {
           if (willSubmit) {
            // If the user confirms, submit the form using AJAX
           $.ajax({
-            url: "/create_menu", // Form submission URL
+            url: "/create_user", // Form submission URL
             type: "POST",
-            data: $("#form_menu").serialize(), // Serialize form data
+            data: $("#form_users").serialize(), // Serialize form data
             success: function(response) {
               // Redirect to /users_list if the submission is successful
               swal({
@@ -72,7 +60,7 @@ $(document).ready(function() {
                 },
               }).then(() => {
                 // Redirect to /users_list after the user clicks "OK"
-                window.location.href = "/menu_list";
+                window.location.href = "/users_list";
               });
             },
             error: function(xhr, status, error) {
@@ -96,35 +84,57 @@ $(document).ready(function() {
         });
       });
 
-      // UPDATE MENU
-      $(document).on('click', '#menuUpdateButton', function() {
-        const menuId = $('#hidden_id_menu').val();
-        console.log(menuId);
+      // GET DATA USER FOR EDIT
+      $(document).on('click', '.userEditBtn', function() {
+        const id = $(this).data('id');
         $.ajax({
-          url: `/menu/update/${menuId}`,
-          type: "PUT",
-          data: {
-            nama_menu: $('#nama_menu').val(),
-            link: $('#link').val(),
-            icon: $('#icon').val(),
-            urutan: $('#urutan').val(),
-            is_active: $('#is_active').val()
+          url: `/user/edit/${id}`,
+          method: 'GET',
+          success: function (data) {
+            $('#fullname').val(data.fullname);
+            $('#username').val(data.username);
+            $('#password').val(data.password); // Reset or leave blank for security
+            $('#id_level').val(data.id_level);
+            $('#is_active').val(data.is_active);
+            $('#hidden_id_user').val(data.id);
+            $('#app').val(data.app);
           },
-          success: function(data) {
+          error: function() {
+            swal("Error", "Failed to load user data.", "error");
+          } 
+        });
+      });
+
+      // UPDATE USER DATA
+      $(document).on('click', '#editUpdateButton', function() {
+        const userId = $('#hidden_id_user').val();
+        $.ajax({
+          url: `/user/update/${userId}`,
+          method: 'PUT',
+          data: {
+            fullname: $('#fullname').val(),
+            username: $('#username').val(),
+            password: $('#password').val(),
+            id_level: $('#id_level').val(),
+            is_active: $('#is_active').val(),
+            app: $('#app').val()
+          },
+          success: function() {
             $('#editUserModal').modal('hide');
-            swal("Success", "Menu updated successfully", "success").then(() => {
+            swal("Success", "User updated successfully", "success").then(() => {
               window.location.reload(); // Refresh or update your data table as needed
             });
-          }, error() {
-            swal("Error", "Could not update menu", "error");
+          },
+          error: function() {
+            swal("Error", "Could not update user", "error");
           }
         });
       });
 
-      // DELETE MENU
-      $(document).on('click', '.menuDelBtn', function(e) {
+      // HAPUS DATA USER
+      $(document).on('click', '.userDelBtn', function(e) {
         e.preventDefault();
-        const id_menu = $(this).data('id');
+        const id_del = $(this).data('id');
 
         swal({
           title: "Are you sure?",
@@ -145,7 +155,7 @@ $(document).ready(function() {
           if (willSubmit) {
             // If the user confirms, submit the form using AJAX
             $.ajax({
-              url: `/menu/delete/${id_menu}`, // Use template literal correctly
+              url: `/user/delete/${id_del}`, // Use template literal correctly
               method: 'DELETE',
               success: function(response) {
                 // Show success message
@@ -161,7 +171,7 @@ $(document).ready(function() {
                   },
                 }).then(() => {
                   // Redirect to /users_list after the user clicks "OK"
-                  window.location.href = "/menu_list";
+                  window.location.href = "/users_list";
                 });
               },
               error: function(xhr, status, error) {
