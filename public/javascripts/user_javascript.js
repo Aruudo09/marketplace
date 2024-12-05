@@ -43,7 +43,7 @@ $(document).ready(function() {
           if (willSubmit) {
            // If the user confirms, submit the form using AJAX
           $.ajax({
-            url: "/create_user", // Form submission URL
+            url: "users/create", // Form submission URL
             type: "POST",
             data: $("#form_users").serialize(), // Serialize form data
             success: function(response) {
@@ -88,7 +88,7 @@ $(document).ready(function() {
       $(document).on('click', '.userEditBtn', function() {
         const id = $(this).data('id');
         $.ajax({
-          url: `/user/edit/${id}`,
+          url: `/users/edit/${id}`,
           method: 'GET',
           success: function (data) {
             $('#fullname').val(data.fullname);
@@ -109,7 +109,7 @@ $(document).ready(function() {
       $(document).on('click', '#editUpdateButton', function() {
         const userId = $('#hidden_id_user').val();
         $.ajax({
-          url: `/user/update/${userId}`,
+          url: `/users/update/${userId}`,
           method: 'PUT',
           data: {
             fullname: $('#fullname').val(),
@@ -155,7 +155,7 @@ $(document).ready(function() {
           if (willSubmit) {
             // If the user confirms, submit the form using AJAX
             $.ajax({
-              url: `/user/delete/${id_del}`, // Use template literal correctly
+              url: `/users/delete/${id_del}`, // Use template literal correctly
               method: 'DELETE',
               success: function(response) {
                 // Show success message

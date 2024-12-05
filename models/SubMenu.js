@@ -1,7 +1,8 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../db');
+// const Menu = require('./Menu');
 
-const SubMenu = sequelize.define('SubMenu', {
+var SubMenu = sequelize.define('SubMenu', {
     id_submenu: {
       type: DataTypes.INTEGER,
       primaryKey: true,
@@ -36,5 +37,10 @@ const SubMenu = sequelize.define('SubMenu', {
     tableName: 'tbl_submenu',  // explicitly set the table name
     timestamps: false, // No need for createdAt or updatedAt columns
   });
+
+  // SubMenu.belongsTo(Menu, {
+  //   as: 'Korelasi', // Alias untuk relasi
+  //   foreignKey: 'id_menu',
+  // });
 
   module.exports = SubMenu;

@@ -1,4 +1,5 @@
 const SubMenu = require('../models/SubMenu');
+const Menu = require('../models/Menu');
 
 // Utility function for centralized error response
 const handleErrorResponse = (res, error, message) => {
@@ -9,14 +10,21 @@ const handleErrorResponse = (res, error, message) => {
   // Get all SubMenu
 exports.getAllSubMenu = async () => {
     try {
-      return await SubMenu.findAll();
+      return await SubMenu.findAll({
+        include: {
+          model: Menu,
+          as: 'korelasi',
+          attributes: ['nama_menu'],
+          required: true,
+        },
+      });
     } catch (error) {
         console.error(error); // Menampilkan error secara lebih rinci
       throw new Error('An error occurred while fetching Data.');
     }
   }; 
 
-  exports.getMenuById = async (req, res) => {
+  exports.getSubMenuById = async (req, res) => {
     const { id } = req.params; // Ambil parameter ID dari request
     try {
       const submenu = await SubMenu.findByPk(id); // Temukan submenu berdasarkan primary key
@@ -40,7 +48,7 @@ exports.getAllSubMenu = async () => {
     }
   };
 
-  exports.updateMenu = async (req, res) => {
+  exports.updateSubMenu = async (req, res) => {
     const { id_submenu } = req.params; // Ambil id dari URL
     const { nama_submenu, link, icon, id_menu, urutan, is_active } = req.body;
     try {
@@ -57,7 +65,7 @@ exports.getAllSubMenu = async () => {
     }
   };
 
-  exports.deleteMenu = async (req,res) => {
+  exports.deleteSubMenu = async (req,res) => {
     try {
       const user = await SubMenu.findByPk(req.params.id); // Reuse getUserById function
       await user.destroy();
@@ -71,7 +79,7 @@ exports.getAllSubMenu = async () => {
     }
   };
 
-  exports.menuGetMax = async (req, res) => {
+  exports.subMenuGetMax = async (req, res) => {
     try {
       const max = await SubMenu.max('urutan'); // Asumsi 'SubMenu' adalah model Sequelize atau ORM lainnya
       res.status(200).json(max); // Kirim data sebagai respons JSON

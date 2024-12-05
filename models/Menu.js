@@ -1,5 +1,6 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../db');
+// const SubMenu = require('./SubMenu'); // Pastikan model SubMenu diimpor
 
 const Menu = sequelize.define('Menu', {
   id_menu: {
@@ -32,5 +33,10 @@ const Menu = sequelize.define('Menu', {
   tableName: 'tbl_menu',  // explicitly set the table name
   timestamps: false, // No need for createdAt or updatedAt columns
 });
+
+// Menu.hasMany(SubMenu, {
+//   foreignKey: 'id_menu',
+//   as: 'SubMenus', // Alias untuk relasi
+// });
 
 module.exports = Menu;

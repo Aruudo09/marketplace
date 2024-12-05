@@ -6,6 +6,9 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const sequelize = require('./db'); // This will connect to the database
 const session = require('express-session');
+const Menu = require('./models/Menu');
+const SubMenu = require('./models/SubMenu');
+const loadSidebar = require('./middleware/loadSidebar');
 
 var indexRouter = require('./routes/index');
 
@@ -19,22 +22,25 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use('/assets', express.static(path.join(__dirname, '../assets')));  
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Middleware session (harus sebelum rute)
 app.use(session({
-  secret: process.env.SESSION_SECRET || 'your-secret-key',
+  secret: 'your-secret-key',
   resave: false,
-  saveUninitialized: false,
-  cookie: { secure: false } // Set secure: true untuk HTTPS
+  saveUninitialized: false
 }));
 
 //USERNAME SESSIONS
 app.use((req, res, next) => {
   res.locals.username = req.session.user ? req.session.user.username : null;
   res.locals.fullname = req.session.user ? req.session.user.fullname : null;
+  res.locals.id_level = req.session.user ? req.session.user.id_level : null;
   next();
 });
+
+app.use(loadSidebar);
 
 // Routes
 app.use('/', indexRouter);
@@ -66,5 +72,9 @@ sequelize.authenticate()
   .catch((error) => {
     console.error('Unable to connect to the database:', error);
   });
+
+  // Deklarasi relasi
+Menu.hasMany(SubMenu, { foreignKey: 'id_menu', as: 'subMenus' });
+SubMenu.belongsTo(Menu, { foreignKey: 'id_menu', as: 'korelasi' });
 
 module.exports = app;

@@ -1,39 +1,7 @@
 $(document).ready(function() {
 
-    // GET DATA MENU FOR EDIT
-    $(document). on('click', '.menuEditBtn', function() {
-        const id = $(this).data('id');
-        $.ajax({
-          url: `/menu/edit/${id}`,
-          type: "GET",
-          success: function(data) {
-            $('#nama_menu').val(data.nama_menu);
-            $('#link').val(data.link);
-            $('#icon').val(data.icon);
-            $('#urutan').val(data.urutan);
-            $('#is_active').val(data.is_active);
-            $('#hidden_id_menu').val(data.id_menu);
-          }, error: function() {
-            swal("Error", "Failed to load user data.", "error");
-          }
-        });
-      });
-
-      // GET MAX URUTAN MENU
-      $.ajax({
-        url: '/menu/get_max',
-        type: "GET",
-        success: function(data) {
-          // console.log(data); // Data 'max' dari server akan dicetak di sini
-          $('#urutan').val(data + 1); // Opsional: Setel nilai input ke hasil
-        },
-        error: function(xhr, status, error) {
-          console.error('Error:', error); // Menangani error
-        }
-      });
-
-      // CREATE MENU
-      $('#form_menu').submit(function(e) {
+    // CREATE SUB MENU
+    $('#form_submenu').submit(function(e) {
         e.preventDefault(); // Prevent the default form submission
         
         swal({
@@ -55,9 +23,9 @@ $(document).ready(function() {
           if (willSubmit) {
            // If the user confirms, submit the form using AJAX
           $.ajax({
-            url: "/menu/create", // Form submission URL
+            url: "submenu/create", // Form submission URL
             type: "POST",
-            data: $("#form_menu").serialize(), // Serialize form data
+            data: $("#form_submenu").serialize(), // Serialize form data
             success: function(response) {
               // Redirect to /users_list if the submission is successful
               swal({
@@ -72,7 +40,7 @@ $(document).ready(function() {
                 },
               }).then(() => {
                 // Redirect to /users_list after the user clicks "OK"
-                window.location.href = "/menu_list";
+                window.location.href = "/submenu/list";
               });
             },
             error: function(xhr, status, error) {
@@ -96,17 +64,52 @@ $(document).ready(function() {
         });
       });
 
-      // UPDATE MENU
-      $(document).on('click', '#menuUpdateButton', function() {
-        const menuId = $('#hidden_id_menu').val();
+      // URURTAN SUBMENU
+      $.ajax({
+        url: '/submenu/get_max',
+        type: "GET",
+        success: function(data) {
+          $('#urutan').val(data + 1); // Opsional: Setel nilai input ke hasil
+        },
+        error: function(xhr, status, error) {
+          console.error('Error:', error); // Menangani error
+        }
+      });
+
+      // GET EDIT DATA SUB MENU
+      $(document). on('click', '.subMenuEditBtn', function() {
+        const id = $(this).data('id');
+        console.log(id);
+        $.ajax({
+          url: `/submenu/edit/${id}`,
+          type: "GET",
+          success: function(data) {
+            console.log(data);
+            $('#nama_submenu').val(data.nama_submenu);
+            $('#link').val(data.link);
+            $('#icon').val(data.icon);
+            $('#id_menu').val(data.id_menu);
+            $('#urutan').val(data.urutan);
+            $('#is_active').val(data.is_active);
+            $('#hidden_id_submenu').val(data.id_submenu);
+          }, error: function() {
+            swal("Error", "Failed to load user data.", "error");
+          }
+        });
+      });
+
+      // UPDATE SUB MENU
+      $(document).on('click', '#subMenuUpdateButton', function() {
+        const menuId = $('#hidden_id_submenu').val();
         console.log(menuId);
         $.ajax({
-          url: `/menu/update/${menuId}`,
+          url: `/submenu/update/${menuId}`,
           type: "PUT",
           data: {
-            nama_menu: $('#nama_menu').val(),
+            nama_submenu: $('#nama_submenu').val(),
             link: $('#link').val(),
             icon: $('#icon').val(),
+            id_menu: $('#id_menu').val( ),
             urutan: $('#urutan').val(),
             is_active: $('#is_active').val()
           },
@@ -121,10 +124,11 @@ $(document).ready(function() {
         });
       });
 
-      // DELETE MENU
-      $(document).on('click', '.menuDelBtn', function(e) {
+      // DELETE SUB MENU
+      $(document).on('click', '.subMenuDelBtn', function(e) {
         e.preventDefault();
-        const id_menu = $(this).data('id');
+        const id_submenu = $(this).data('id');
+        console.log(id_submenu);
 
         swal({
           title: "Are you sure?",
@@ -145,7 +149,7 @@ $(document).ready(function() {
           if (willSubmit) {
             // If the user confirms, submit the form using AJAX
             $.ajax({
-              url: `/menu/delete/${id_menu}`, // Use template literal correctly
+              url: `/submenu/delete/${id_submenu}`, // Use template literal correctly
               method: 'DELETE',
               success: function(response) {
                 // Show success message
@@ -161,7 +165,7 @@ $(document).ready(function() {
                   },
                 }).then(() => {
                   // Redirect to /users_list after the user clicks "OK"
-                  window.location.href = "/menu_list";
+                  window.location.href = "/submenu_list";
                 });
               },
               error: function(xhr, status, error) {
@@ -183,6 +187,7 @@ $(document).ready(function() {
             swal.close();
           }
         });
+
       });
 
 });

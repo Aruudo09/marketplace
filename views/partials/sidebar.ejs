@@ -7,7 +7,7 @@
           <div class="logo-header" data-background-color="dark">
             <a href="/" class="logo">
               <img
-                src="assets/img/kaiadmin/logo_light.svg"
+                src="../assets/img/kaiadmin/logo_light.svg"
                 alt="navbar brand"
                 class="navbar-brand"
                 height="20"
@@ -30,6 +30,31 @@
         <div class="sidebar-wrapper scrollbar scrollbar-inner">
           <div class="sidebar-content">
             <ul class="nav nav-secondary">
+              <% sidebarMenus.forEach(menu => { %>
+                  <% if (menu.submenus.length > 0) { %>
+                      <li class="nav-item">
+                          <a data-bs-toggle="collapse" class="collapsed" href="<%= menu.link %>" data-target="#menu-<%= menu.id_menu %>">
+                              <i class="<%= menu.icon %>"></i> <p><%= menu.nama_menu %></p>
+                              <span class="caret"></span>
+                          </a>
+                          <div id="<%= menu.nama_menu %>" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+                              <ul class="nav nav-collapse">
+                                  <% menu.submenus.forEach(submenu => { %>
+                                      <li><a class="collapse-item" href="<%= submenu.link %>">&nbsp;&nbsp;&nbsp;&nbsp;<i class="<%= submenu.icon %>"></i><%= submenu.nama_submenu %></a></li>
+                                  <% }); %>
+                              </ul>
+                          </div>
+                      </li>
+                  <% } else { %>
+                      <li class="nav-item">
+                          <a class="nav-link" href="<%= menu.link %>">
+                              <i class="<%= menu.icon %>"></i><p><%= menu.nama_menu %></p> 
+                          </a>
+                      </li>
+                  <% } %>
+              <% }); %>
+          </ul>          
+            <!-- <ul class="nav nav-secondary">
               <li class="nav-item active">
                 <a
                   data-bs-toggle="collapse"
@@ -293,7 +318,7 @@
                   </ul>
                 </div>
               </li>
-            </ul>
+            </ul> -->
           </div>
         </div>
       </div>
