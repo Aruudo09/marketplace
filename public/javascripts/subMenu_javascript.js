@@ -23,7 +23,7 @@ $(document).ready(function() {
           if (willSubmit) {
            // If the user confirms, submit the form using AJAX
           $.ajax({
-            url: "submenu/create", // Form submission URL
+            url: "/submenu/create", // Form submission URL
             type: "POST",
             data: $("#form_submenu").serialize(), // Serialize form data
             success: function(response) {
@@ -79,12 +79,12 @@ $(document).ready(function() {
       // GET EDIT DATA SUB MENU
       $(document). on('click', '.subMenuEditBtn', function() {
         const id = $(this).data('id');
-        console.log(id);
+        // console.log(id);
         $.ajax({
           url: `/submenu/edit/${id}`,
           type: "GET",
           success: function(data) {
-            console.log(data);
+            // console.log(data);
             $('#nama_submenu').val(data.nama_submenu);
             $('#link').val(data.link);
             $('#icon').val(data.icon);
@@ -100,10 +100,10 @@ $(document).ready(function() {
 
       // UPDATE SUB MENU
       $(document).on('click', '#subMenuUpdateButton', function() {
-        const menuId = $('#hidden_id_submenu').val();
-        console.log(menuId);
+        const id_submenu = $('#hidden_id_submenu').val();
+        console.log(id_submenu);
         $.ajax({
-          url: `/submenu/update/${menuId}`,
+          url: `/submenu/update/${id_submenu}`,
           type: "PUT",
           data: {
             nama_submenu: $('#nama_submenu').val(),
@@ -165,7 +165,7 @@ $(document).ready(function() {
                   },
                 }).then(() => {
                   // Redirect to /users_list after the user clicks "OK"
-                  window.location.href = "/submenu_list";
+                  window.location.href = "/submenu/list";
                 });
               },
               error: function(xhr, status, error) {

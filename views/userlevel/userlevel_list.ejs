@@ -29,8 +29,12 @@
               <div class="d-flex align-items-center">
                 <h4 class="card-title">User Level Table</h4>
                 <a
-                  class="btn btn-primary btn-round ms-auto"
-                  href="/userlevel_form"
+                  class="btn btn-primary btn-round ms-auto userLevelAddBtn"
+                  data-bs-toggle="modal"
+                  data-bs-target="#editUserModal"
+                  data-bs-toggle="tooltip"
+                  title=""
+                  data-original-title="Edit Task"
                 >
                   <i class="fa fa-plus"></i>
                   Add Row
@@ -40,7 +44,18 @@
             <div class="card-body">
 
               <div class="table-responsive">
-                <table
+                <table id="userLevelTable" class="table table-striped table-bordered">
+                  <thead>
+                    <tr>
+                      <th>ID Level</th>
+                      <th>Nama Level</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody> <!-- Data akan diisi secara dinamis oleh DataTables -->
+                </table>
+                
+                <!-- <table
                   id="add-row"
                   class="display table table-striped table-hover"
                 >
@@ -91,8 +106,9 @@
                         </tr>
                     <% } ); %>
                   </tbody>
-                </table>
+                </table> -->
               </div>
+
             </div>
 
               <!-- MODAL EDIT DATA -->
@@ -144,7 +160,7 @@
                     <button
                       type="button"
                       id="editUpdateButton"
-                      class="btn btn-primary"
+                      class="btn btn-primary userLevelBtn"
                     >
                       Edit
                     </button>

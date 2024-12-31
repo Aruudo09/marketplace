@@ -72,7 +72,7 @@ $(document).ready(function() {
                 },
               }).then(() => {
                 // Redirect to /users_list after the user clicks "OK"
-                window.location.href = "/menu_list";
+                window.location.href = "/menu/list";
               });
             },
             error: function(xhr, status, error) {
@@ -98,10 +98,10 @@ $(document).ready(function() {
 
       // UPDATE MENU
       $(document).on('click', '#menuUpdateButton', function() {
-        const menuId = $('#hidden_id_menu').val();
-        console.log(menuId);
+        const id = $('#hidden_id_menu').val();
+        console.log(id);
         $.ajax({
-          url: `/menu/update/${menuId}`,
+          url: `/menu/update/${id}`,
           type: "PUT",
           data: {
             nama_menu: $('#nama_menu').val(),
@@ -161,7 +161,7 @@ $(document).ready(function() {
                   },
                 }).then(() => {
                   // Redirect to /users_list after the user clicks "OK"
-                  window.location.href = "/menu_list";
+                  window.location.href = "/menu/list";
                 });
               },
               error: function(xhr, status, error) {

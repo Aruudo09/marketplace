@@ -20,7 +20,7 @@ router.get('/form', ensureAuthenticated, (req, res) => {
 router.post('/create', errorHandler(menuController.createMenu));
 
 // UPDATE MENU
-router.put('/update/:id', errorHandler(menuController.updateMenu));
+router.put('/update/:id_menu', errorHandler(menuController.updateMenu));
 
 // DELETE MENU
 router.delete('/delete/:id', errorHandler(menuController.deleteMenu));

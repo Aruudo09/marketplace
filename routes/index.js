@@ -10,7 +10,7 @@ const loadSidebar = require('../middleware/loadSidebar');
 const userController = require('../controllers/userController');
 
 // Default Route
-router.get('/', (req, res) => {
+router.get('/', ensureAuthenticated, (req, res) => {
   const jslink = 'javascripts/javascript.js';
   res.render('home', { link: 'index', jslink });
 });

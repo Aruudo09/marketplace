@@ -51,12 +51,12 @@ exports.getAllMenu = async () => {
   };
 
   exports.updateMenu = async (req, res) => {
-    const { id_menu } = req.params; // Ambil id dari URL
+    const { id_menu } = req.params; // Ambil id_menu dari URL
     const { nama_menu, link, icon, urutan, is_active } = req.body;
     try {
       const menu = await Menu.findByPk(id_menu); // Temukan menu berdasarkan ID
     if (!menu) {
-      return res.status(404).json({ error: 'Menu not found.' });
+      return res.status(404).json({ error: id_menu });
     }
 
     await Menu.update({ nama_menu, link, icon, urutan, is_active }, { where: { id_menu } });

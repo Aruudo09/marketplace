@@ -14,15 +14,23 @@ exports.getAllUserLevel = async () => {
       throw new Error('An error occurred while fetching users.');
     }
   };
+
+  const findUserLevelById = async (id) => {
+    return await UserLevel.findByPk(id);
+  };
   
   // Get userlevel by ID
-  exports.getUserLevelById = async (id) => {
+  exports.getUserLevelById = async (req, res) => {
+    const { id } = req.params;
     try {
-      const userlevel = await UserLevel.findByPk(id);
-      if (!userlevel) throw new Error('User not found.');
-      return userlevel;
+      const menu = await findUserLevelById(id);
+      if (!menu) {
+        return res.status(404).json({ error: 'UserLevel not found.' });
+      }
+      return res.status(200).json(menu);
     } catch (error) {
-      throw new Error(error.message);
+      console.error(error);
+      return res.status(500).json({ error: 'An error occurred while fetching the menu.' });
     }
   };
   
@@ -40,9 +48,9 @@ exports.getAllUserLevel = async () => {
   
   // Create a new user
   exports.createUserLevel = async (req, res) => {
-    const { id_level, nama_level } = req.body;
+    const { nama_level } = req.body;
     try {
-      const newUser = await User.create({ id_level, nama_level });
+      const newUser = await UserLevel.create({ nama_level });
       res.status(201).json(newUser);
     } catch (error) {
       handleErrorResponse(res, error, 'An error occurred while creating the user.');
@@ -51,24 +59,26 @@ exports.getAllUserLevel = async () => {
   
   // Update a userlevel
   exports.updateUserLevel = async (req, res) => {
-    const { id_level, nama_level } = req.body;
+    const { id } = req.params;
+    const { nama_level } = req.body;
     try {
-      const userlevel = await exports.getUserLevelById(req.params.id); // Reuse getUserById function
-      await userlevel.update({ id_level, nama_level });
-      res.json(userlevel);
-    } catch (error) {
-      if (error.message === 'User not found.') {
-        res.status(404).json({ error: error.message });
-      } else {
-        handleErrorResponse(res, error, 'An error occurred while updating the user.');
+      const userlevel = await findUserLevelById(id);
+      if (!userlevel) {
+        return res.status(404).json({ error: 'UserLevel not found.' });
       }
+      await userlevel.update({ nama_level });
+      return res.status(200).json(userlevel);
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ error: 'An error occurred while updating the user level.' });
     }
   };
   
   // Delete a userlevel
-  exports.deleteUser = async (req, res) => {
+  exports.deleteUserLevel = async (req, res) => {
+    const { id } = req.params;
     try {
-      const userlevel = await exports.getUserLevelById(req.params.id); // Reuse getUserById function
+      const userlevel = await findUserLevelById(id); // Reuse getUserById function
       await userlevel.destroy();
       res.json({ message: 'User Level deleted successfully.' });
     } catch (error) {

@@ -29,7 +29,7 @@ router.get('/edit/:id', subMenuController.getSubMenuById);
 router.post('/create', errorHandler(subMenuController.createSubMenu));
 
 // UPDATE SUBMENU
-router.put('/update/:id', errorHandler(subMenuController.updateSubMenu));
+router.put('/update/:id_submenu', errorHandler(subMenuController.updateSubMenu));
 
 // DELETE SUBMENU
 router.delete('/delete/:id', errorHandler(subMenuController.deleteSubMenu));

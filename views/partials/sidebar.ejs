@@ -33,7 +33,7 @@
               <% sidebarMenus.forEach(menu => { %>
                   <% if (menu.submenus.length > 0) { %>
                       <li class="nav-item">
-                          <a data-bs-toggle="collapse" class="collapsed" href="<%= menu.link %>" data-target="#menu-<%= menu.id_menu %>">
+                          <a data-bs-toggle="collapse" class="collapsed" href="<%= menu.link %>" data-target="#<%= menu.nama_menu %>">
                               <i class="<%= menu.icon %>"></i> <p><%= menu.nama_menu %></p>
                               <span class="caret"></span>
                           </a>
